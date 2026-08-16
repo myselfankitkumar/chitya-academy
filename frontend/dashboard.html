@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Portal | Chitya Academy</title>
-    <!-- html2pdf.js for Client-Side PDF Generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
@@ -21,7 +20,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: var(--bg-light); display: flex; min-height: 100vh; overflow-x: hidden; }
 
-        /* Sidebar Styling */
         .sidebar { width: var(--sidebar-width); background-color: #061124; color: var(--text-light); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; z-index: 1000; transform: translateX(0); transition: transform 0.3s ease; }
         .sidebar-header { padding: 25px 20px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .sidebar-header h2 { color: var(--accent-gold); font-size: 20px; margin-bottom: 5px; }
@@ -30,7 +28,6 @@
         .sidebar-menu li a { display: block; padding: 15px 25px; color: #b0c4de; text-decoration: none; font-weight: 500; transition: all 0.2s ease; border-left: 4px solid transparent; cursor: pointer; font-size: 15px; }
         .sidebar-menu li a:hover, .sidebar-menu li a.active { background-color: rgba(255,255,255,0.06); border-left-color: var(--accent-gold); color: var(--text-light); }
 
-        /* Main Content */
         .main-content { margin-left: var(--sidebar-width); padding: 30px; width: calc(100% - var(--sidebar-width)); min-height: 100vh; transition: margin-left 0.3s ease, width 0.3s ease; }
         .header-bar { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); margin-bottom: 25px; gap: 15px; flex-wrap: wrap; }
         .header-bar h1 { font-size: 20px; color: var(--primary-blue); }
@@ -41,7 +38,6 @@
         .dashboard-section { display: none; }
         .dashboard-section.active { display: block; }
 
-        /* Grids & Cards */
         .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         .card-box { background: #fff; border-radius: 8px; padding: 22px; box-shadow: 0 4px 6px rgba(0,0,0,0.04); position: relative; border-top: 4px solid var(--primary-blue); display: flex; flex-direction: column; justify-content: space-between; }
         .card-box.locked { border-top-color: var(--alert-red); }
@@ -57,12 +53,10 @@
         .btn-secondary { background-color: #edf2f7; color: #4a5568; }
         .no-data { grid-column: 1 / -1; text-align: center; padding: 40px; background: #fff; border-radius: 8px; color: #666; box-shadow: 0 4px 6px rgba(0,0,0,0.04); }
 
-        /* Subject Filter Tabs */
         .subject-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
         .tab-btn { background: #fff; border: 1px solid #cbd5e0; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; color: var(--primary-blue); cursor: pointer; transition: all 0.2s; }
         .tab-btn:hover, .tab-btn.active { background: var(--primary-blue); color: var(--accent-gold); border-color: var(--primary-blue); }
 
-        /* EXAM MODE */
         #active-test-view { display: none; background: #fff; border-radius: 10px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .exam-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #edf2f7; padding-bottom: 15px; margin-bottom: 25px; }
         .exam-title { color: var(--primary-blue); font-size: 22px; }
@@ -71,12 +65,10 @@
         .option-label { display: block; padding: 10px 15px; margin-bottom: 8px; background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
         .option-label:hover { border-color: var(--primary-blue); }
 
-        /* Table Styling for Profile/Progress */
         .progress-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         .progress-table th { padding: 12px 15px; text-align: left; background: #f8f9fa; color: var(--primary-blue); font-size: 13px; text-transform: uppercase; border-bottom: 2px solid #edf2f7; }
         .progress-table td { padding: 15px; border-bottom: 1px solid #edf2f7; color: #444; font-size: 14px; }
         
-        /* Logout Modal */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 28, 60, 0.6); backdrop-filter: blur(3px); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
         .modal-card { background: #fff; padding: 30px; border-radius: 10px; width: 100%; max-width: 400px; text-align: center; border-top: 5px solid var(--alert-red); }
         .modal-actions { display: flex; gap: 12px; margin-top: 20px; }
@@ -116,7 +108,6 @@
             </div>
         </div>
 
-        <!-- SECTION 1: Overview -->
         <div id="section-overview" class="dashboard-section active">
             <div class="card-box">
                 <h2 style="color: var(--primary-blue); margin-bottom: 10px;">Welcome to Chitya Academy Learning Hub</h2>
@@ -124,7 +115,6 @@
             </div>
         </div>
 
-        <!-- SECTION 2: Study Materials -->
         <div id="section-materials" class="dashboard-section">
             <h2 style="color: var(--primary-blue); margin-bottom: 20px; font-size: 20px;">Study Materials</h2>
             <div class="grid-container" id="materials-container">
@@ -132,7 +122,6 @@
             </div>
         </div>
 
-        <!-- SECTION 3: Notice Board -->
         <div id="section-notice" class="dashboard-section">
             <h2 style="color: var(--primary-blue); margin-bottom: 20px;">Director's Notice Board</h2>
             <div id="notice-container">
@@ -140,7 +129,6 @@
             </div>
         </div>
 
-        <!-- SECTION 4: Online Test Series -->
         <div id="section-tests" class="dashboard-section">
             <div id="test-list-view">
                 <h2 style="color: var(--primary-blue); margin-bottom: 15px;">Available Test Series</h2>
@@ -174,7 +162,6 @@
             </div>
         </div>
 
-        <!-- SECTION 5: My Profile & Progress Tracking -->
         <div id="section-profile" class="dashboard-section">
             <div class="card-box" style="margin-bottom: 25px;">
                 <h2 style="color: var(--primary-blue); margin-bottom: 20px;">Account Details</h2>
@@ -198,7 +185,6 @@
 
     </div>
 
-    <!-- Logout Modal -->
     <div class="modal-overlay" id="logoutModal">
         <div class="modal-card">
             <h3 style="color: var(--primary-blue); font-size: 20px; margin-bottom: 10px;">Confirm Logout</h3>
@@ -262,7 +248,7 @@
 
         async function fetchMaterials(targetClass, isPremium) {
             try {
-                const response = await fetch(`http://localhost:3000/api/materials/${encodeURIComponent(targetClass)}`);
+                const response = await fetch(`/api/materials/${encodeURIComponent(targetClass)}`);
                 const data = await response.json();
                 const container = document.getElementById('materials-container');
 
@@ -294,7 +280,7 @@
 
         async function fetchNotices() {
             try {
-                const response = await fetch('http://localhost:3000/api/notices');
+                const response = await fetch('/api/notices');
                 const data = await response.json();
                 const container = document.getElementById('notice-container');
 
@@ -317,13 +303,12 @@
             }
         }
 
-        // --- EXAM SYSTEM LOGIC ---
         let allGlobalTests = [];
         let currentActiveTest = null;
 
         async function fetchStudentTests(targetClass) {
             try {
-                const response = await fetch(`http://localhost:3000/api/tests/${encodeURIComponent(targetClass)}`);
+                const response = await fetch(`/api/tests/${encodeURIComponent(targetClass)}`);
                 const data = await response.json();
                 
                 if (response.ok && data.tests.length > 0) {
@@ -376,7 +361,6 @@
             });
         }
 
-        // --- PDF EXPORT LOGIC WITH ROBUST LOGO.JPG WATERMARK ---
         function exportTestPDF(testId) {
             const test = allGlobalTests.find(t => t.id === testId);
             if (!test) return;
@@ -388,7 +372,6 @@
             element.style.fontFamily = 'Helvetica, sans-serif';
             element.style.color = '#333';
 
-            // 1. Chitya Academy Header
             let html = `
                 <div style="text-align: center; border-bottom: 3px solid #0b1c3c; padding-bottom: 15px; margin-bottom: 30px;">
                     <h1 style="color: #0b1c3c; margin: 0; font-size: 28px; text-transform: uppercase; font-weight: bold;">Chitya Academy</h1>
@@ -398,7 +381,6 @@
                 <p style="color: #666; margin-bottom: 30px; font-weight: bold;">Subject: ${test.subject} | Target: ${studentData.target_class}</p>
             `;
 
-            // 2. Questions Format
             questionsArray.forEach((q, qIndex) => {
                 html += `
                     <div style="margin-bottom: 25px; page-break-inside: avoid;">
@@ -411,7 +393,6 @@
                 html += `</div></div>`;
             });
 
-            // 3. Footer Branding
             html += `
                 <div style="margin-top: 50px; text-align: center; border-top: 2px solid #edf2f7; padding-top: 20px; font-size: 12px; color: #888; page-break-inside: avoid;">
                     <p style="margin: 0; font-weight: bold;">Chitya Academy &copy; ${new Date().getFullYear()}</p>
@@ -429,13 +410,11 @@
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
-            // 4. Load the Logo securely using a Canvas before passing to jsPDF
             const img = new Image();
-            img.crossOrigin = "Anonymous"; // Prevent CORS blocking
+            img.crossOrigin = "Anonymous";
             img.src = 'logo.jpg'; 
             
             img.onload = function() {
-                // Convert to base64 Data URL to guarantee it renders in the PDF
                 const canvas = document.createElement('canvas');
                 canvas.width = img.width;
                 canvas.height = img.height;
@@ -462,12 +441,10 @@
             };
 
             img.onerror = function() {
-                console.warn("logo.jpg not found. Downloading without watermark.");
                 html2pdf().set(opt).from(element).save();
             };
         }
 
-        // --- EXAM TAKING LOGIC ---
         function openExamMode(testId) {
             currentActiveTest = allGlobalTests.find(t => t.id === testId);
             if (!currentActiveTest) return;
@@ -535,7 +512,7 @@
 
             if (studentData) {
                 try {
-                    await fetch('http://localhost:3000/api/tests/submit', {
+                    await fetch('/api/tests/submit', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -551,11 +528,10 @@
             }
         }
 
-        // --- PROGRESS / PERFORMANCE LOGIC ---
         async function fetchStudentProgress() {
             if (!studentData) return;
             try {
-                const response = await fetch(`http://localhost:3000/api/progress/${studentData.id}`);
+                const response = await fetch(`/api/progress/${studentData.id}`);
                 const data = await response.json();
                 const container = document.getElementById('progress-container');
 

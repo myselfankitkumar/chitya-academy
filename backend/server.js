@@ -61,7 +61,7 @@ app.post('/api/register', async (req, res) => {
             [full_name, email, phone_number, password_hash, target_class, verificationToken]
         );
 
-        const verificationUrl = `http://localhost:3000/api/verify?token=${verificationToken}`;
+        const verificationUrl = `https://chitya-academy.onrender.com/api/verify?token=${verificationToken}`;
         
         await transporter.sendMail({
             from: '"Chitya Academy" <chityaacademy@gmail.com>',
@@ -163,7 +163,7 @@ app.post('/api/forgot-password', async (req, res) => {
             [resetToken, expiryTime, user.id]
         );
 
-        const resetUrl = `http://localhost:3000/reset-password.html?token=${resetToken}`;
+        const resetUrl = `https://chitya-academy.onrender.com/reset-password.html?token=${resetToken}`;
 
         await transporter.sendMail({
             from: '"Chitya Academy" <chityaacademy@gmail.com>',
@@ -412,7 +412,6 @@ app.get('/api/notices', async (req, res) => {
 // ==========================================
 app.get('/api/health', async (req, res) => {
     try {
-        // This tiny query forces Supabase to register activity
         await pool.query('SELECT 1'); 
         res.status(200).send("Chitya Academy Server and Database are wide awake!");
     } catch (err) {
@@ -421,7 +420,7 @@ app.get('/api/health', async (req, res) => {
     }
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Chitya Academy Backend is running on http://localhost:${PORT}`);
+    console.log(`Chitya Academy Backend is running on port ${PORT}`);
 });

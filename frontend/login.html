@@ -15,178 +15,30 @@
             --bg-light: #f8f9fa;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-light);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .auth-container {
-            background-color: #fff;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 450px;
-            border-top: 5px solid var(--accent-gold);
-            position: relative;
-        }
-
-        .header-section {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .logo-img {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--primary-blue);
-            margin-bottom: 10px;
-        }
-
-        .header-section h2 {
-            color: var(--primary-blue);
-            font-size: 24px;
-        }
-
-        /* Toggle Buttons */
-        .toggle-box {
-            display: flex;
-            margin-bottom: 25px;
-            border-bottom: 2px solid #eee;
-        }
-
-        .toggle-btn {
-            flex: 1;
-            padding: 10px;
-            text-align: center;
-            background: none;
-            border: none;
-            font-size: 16px;
-            font-weight: bold;
-            color: #888;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .toggle-btn.active {
-            color: var(--primary-blue);
-            border-bottom: 3px solid var(--accent-gold);
-        }
-
-        /* Forms */
-        .form-section {
-            display: none;
-        }
-
-        .form-section.active {
-            display: block;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--primary-blue);
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 15px;
-        }
-
-        .form-group input:focus, .form-group select:focus {
-            outline: none;
-            border-color: var(--accent-gold);
-            box-shadow: 0 0 5px rgba(253, 208, 23, 0.5);
-        }
-
-        .btn-submit {
-            width: 100%;
-            background-color: var(--primary-blue);
-            color: var(--accent-gold);
-            padding: 12px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            margin-top: 10px;
-        }
-
-        .btn-submit:hover {
-            background-color: #08152d;
-        }
-
-        .btn-secondary {
-            background-color: #e2e8f0;
-            color: #4a5568;
-            margin-top: 8px;
-        }
-
-        .btn-secondary:hover {
-            background-color: #cbd5e0;
-        }
-
-        #message {
-            margin-top: 15px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .success-card {
-            text-align: center;
-            padding: 10px 0;
-        }
-
-        .success-icon {
-            width: 60px;
-            height: 60px;
-            background-color: rgba(16, 185, 129, 0.1);
-            color: var(--success-green);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            margin: 0 auto 15px auto;
-        }
-
-        .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 25px;
-            color: var(--alert-red);
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .back-link:hover {
-            text-decoration: underline;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-light); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .auth-container { background-color: #fff; padding: 40px; border-radius: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); width: 100%; max-width: 450px; border-top: 5px solid var(--accent-gold); position: relative; }
+        .header-section { text-align: center; margin-bottom: 25px; }
+        .logo-img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-blue); margin-bottom: 10px; }
+        .header-section h2 { color: var(--primary-blue); font-size: 24px; }
+        .toggle-box { display: flex; margin-bottom: 25px; border-bottom: 2px solid #eee; }
+        .toggle-btn { flex: 1; padding: 10px; text-align: center; background: none; border: none; font-size: 16px; font-weight: bold; color: #888; cursor: pointer; transition: 0.3s; }
+        .toggle-btn.active { color: var(--primary-blue); border-bottom: 3px solid var(--accent-gold); }
+        .form-section { display: none; }
+        .form-section.active { display: block; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; color: var(--primary-blue); font-weight: bold; font-size: 14px; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 15px; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--accent-gold); box-shadow: 0 0 5px rgba(253, 208, 23, 0.5); }
+        .btn-submit { width: 100%; background-color: var(--primary-blue); color: var(--accent-gold); padding: 12px; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background-color 0.3s; margin-top: 10px; }
+        .btn-submit:hover { background-color: #08152d; }
+        .btn-secondary { background-color: #e2e8f0; color: #4a5568; margin-top: 8px; }
+        .btn-secondary:hover { background-color: #cbd5e0; }
+        #message { margin-top: 15px; text-align: center; font-weight: bold; font-size: 14px; }
+        .success-card { text-align: center; padding: 10px 0; }
+        .success-icon { width: 60px; height: 60px; background-color: rgba(16, 185, 129, 0.1); color: var(--success-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 15px auto; }
+        .back-link { display: block; text-align: center; margin-top: 25px; color: var(--alert-red); text-decoration: none; font-weight: bold; font-size: 14px; }
+        .back-link:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -202,7 +54,6 @@
             <button class="toggle-btn" id="btn-register" onclick="switchTab('register')">Create Free Account</button>
         </div>
 
-        <!-- Login Form -->
         <div id="form-login" class="form-section active">
             <form id="loginForm">
                 <div class="form-group">
@@ -220,7 +71,6 @@
             </form>
         </div>
 
-        <!-- Forgot Password Form -->
         <div id="form-forgot" class="form-section">
             <p style="font-size: 14px; color: #555; margin-bottom: 20px; line-height: 1.5;">Enter your registered email address below, and we will send you a secure link to reset your password.</p>
             <form id="forgotForm">
@@ -233,7 +83,6 @@
             </form>
         </div>
 
-        <!-- Success View (Replaces Form on Success) -->
         <div id="form-success" class="form-section">
             <div class="success-card">
                 <div class="success-icon">✓</div>
@@ -243,7 +92,6 @@
             </div>
         </div>
 
-        <!-- Registration Form -->
         <div id="form-register" class="form-section">
             <form id="registerForm">
                 <div class="form-group">
@@ -262,18 +110,12 @@
                     <label>Target Class</label>
                     <select id="reg-class" required>
                         <option value="">Select Class</option>
-                        <option value="Class 1">Class 1</option>
-                        <option value="Class 2">Class 2</option>
-                        <option value="Class 3">Class 3</option>
-                        <option value="Class 4">Class 4</option>
-                        <option value="Class 5">Class 5</option>
-                        <option value="Class 6">Class 6</option>
-                        <option value="Class 7">Class 7</option>
-                        <option value="Class 8">Class 8</option>
-                        <option value="Class 9">Class 9</option>
-                        <option value="Class 10">Class 10</option>
-                        <option value="Class 11">Class 11</option>
-                        <option value="Class 12">Class 12</option>
+                        <option value="Class 1">Class 1</option><option value="Class 2">Class 2</option>
+                        <option value="Class 3">Class 3</option><option value="Class 4">Class 4</option>
+                        <option value="Class 5">Class 5</option><option value="Class 6">Class 6</option>
+                        <option value="Class 7">Class 7</option><option value="Class 8">Class 8</option>
+                        <option value="Class 9">Class 9</option><option value="Class 10">Class 10</option>
+                        <option value="Class 11">Class 11</option><option value="Class 12">Class 12</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -288,7 +130,6 @@
         <a href="index.html" class="back-link">← Return to Homepage</a>
     </div>
 
-    <!-- JavaScript to handle Tabs and UI Views -->
     <script>
         function switchTab(tab) {
             document.getElementById('form-login').classList.remove('active');
@@ -329,7 +170,6 @@
             document.getElementById('message').textContent = '';
         }
 
-        // Forgot Password Engine
         document.getElementById('forgotForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('forgot-email').value;
@@ -339,7 +179,7 @@
             messageBox.textContent = "Sending reset instructions...";
 
             try {
-                const response = await fetch('http://localhost:3000/api/forgot-password', {
+                const response = await fetch('/api/forgot-password', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email })
@@ -360,7 +200,6 @@
             }
         });
 
-        // Login Engine Wiring with LocalStorage Fix
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('login-email').value;
@@ -368,7 +207,7 @@
             const messageBox = document.getElementById('message');
 
             try {
-                const response = await fetch('http://localhost:3000/api/login', {
+                const response = await fetch('/api/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
@@ -391,7 +230,6 @@
             }
         });
 
-        // Registration Engine Wiring with Phone Number Support
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const full_name = document.getElementById('reg-name').value;
@@ -402,7 +240,7 @@
             const messageBox = document.getElementById('message');
 
             try {
-                const response = await fetch('http://localhost:3000/api/register', {
+                const response = await fetch('/api/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ full_name, email, phone_number, password, target_class })
