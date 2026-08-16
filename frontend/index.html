@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chitya Academy | Igniting Minds</title>
+    <style>
+        :root {
+            --primary-blue: #0b1c3c;
+            --primary-hover: #132b58;
+            --accent-gold: #fdd017;
+            --accent-hover: #e5bc00;
+            --alert-red: #d92027;
+            --text-dark: #2d3748;
+            --text-light: #ffffff;
+            --bg-light: #f8fafc;
+            --card-bg: #ffffff;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Professional Header */
+        header {
+            background-color: var(--primary-blue);
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            border-bottom: 2px solid rgba(253, 208, 23, 0.2);
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logo-img {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: #fff;
+            border: 2px solid var(--accent-gold);
+            box-shadow: 0 0 10px rgba(253, 208, 23, 0.4);
+        }
+
+        .logo-text {
+            color: var(--accent-gold);
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+        }
+
+        .menu-toggle {
+            display: none;
+            color: var(--accent-gold);
+            font-size: 26px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .menu-toggle:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-gold);
+        }
+
+        .login-btn {
+            background-color: var(--accent-gold);
+            color: var(--primary-blue) !important;
+            padding: 9px 20px;
+            border-radius: 6px;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(253, 208, 23, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .login-btn:hover {
+            background-color: #fff;
+            transform: translateY(-1px);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #061226 100%);
+            color: var(--text-light);
+            text-align: center;
+            padding: 90px 20px 110px 20px;
+            border-bottom: 5px solid var(--accent-gold);
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 52px;
+            margin-bottom: 18px;
+            color: var(--accent-gold);
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 19px;
+            max-width: 650px;
+            margin: 0 auto 35px auto;
+            color: #cbd5e1;
+            font-weight: 400;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background-color: var(--alert-red);
+            color: var(--text-light);
+            padding: 14px 28px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 15px;
+            border-radius: 6px;
+            box-shadow: 0 4px 15px rgba(217, 32, 39, 0.4);
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #b5191f;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--accent-gold);
+            padding: 14px 28px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 15px;
+            border-radius: 6px;
+            border: 2px solid var(--accent-gold);
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--accent-gold);
+            color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+
+        /* Fixed Key Features Floating Bar Container */
+        .features-wrapper {
+            max-width: 1200px;
+            margin: -45px auto 0 auto;
+            padding: 0 5%;
+            position: relative;
+            z-index: 20;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            padding: 30px 25px;
+            background: #fff;
+            box-shadow: var(--shadow);
+            border-radius: 12px;
+            border-bottom: 4px solid var(--accent-gold);
+        }
+
+        .feature-item {
+            text-align: center;
+            font-weight: 700;
+            color: var(--primary-blue);
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .feature-item span {
+            color: #10b981;
+            font-size: 18px;
+            background: rgba(16, 185, 129, 0.1);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Courses Section (Middle) */
+        .courses-section {
+            padding: 90px 6%;
+            text-align: center;
+            background-color: var(--bg-light);
+        }
+
+        .section-subtitle {
+            color: var(--alert-red);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .courses-section h2 {
+            font-size: 36px;
+            color: var(--primary-blue);
+            margin-bottom: 45px;
+            font-weight: 800;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 30px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-top: 5px solid var(--primary-blue);
+            padding: 35px 25px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            transition: transform 0.25s ease, border-top-color 0.25s ease;
+            text-align: left;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            border-top-color: var(--accent-gold);
+        }
+
+        .card h3 {
+            color: var(--primary-blue);
+            margin-bottom: 12px;
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .card p {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .card ul {
+            list-style: none;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 15px;
+        }
+
+        .card ul li {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #334155;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card ul li::before {
+            content: "✓";
+            color: var(--alert-red);
+            font-weight: 900;
+        }
+
+        /* Professional About Us Section (Bottom) */
+        .about-section {
+            padding: 90px 6%;
+            background-color: #fff;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .about-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .about-content h2 {
+            font-size: 36px;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .about-content p {
+            color: #475569;
+            font-size: 16px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        .about-highlights {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .highlight-box {
+            background: var(--bg-light);
+            padding: 18px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-gold);
+        }
+
+        .highlight-box h4 {
+            color: var(--primary-blue);
+            font-size: 16px;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .highlight-box p {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 0;
+        }
+
+        .about-card-visual {
+            background: linear-gradient(135deg, var(--primary-blue), #132b58);
+            padding: 40px;
+            border-radius: 14px;
+            color: #fff;
+            box-shadow: var(--shadow);
+            border-top: 6px solid var(--accent-gold);
+            text-align: center;
+        }
+
+        .about-card-visual h3 {
+            color: var(--accent-gold);
+            font-size: 26px;
+            margin-bottom: 15px;
+        }
+
+        .about-card-visual p {
+            color: #cbd5e1;
+            font-size: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            border-top: 1px solid rgba(255,255,255,0.15);
+            padding-top: 20px;
+        }
+
+        .stat-item h2 {
+            color: var(--accent-gold);
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .stat-item p {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #94a3b8;
+            margin-bottom: 0;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary-blue);
+            color: var(--text-light);
+            text-align: center;
+            padding: 50px 20px;
+            border-top: 4px solid var(--accent-gold);
+        }
+
+        footer h2 {
+            font-size: 24px;
+            margin-bottom: 12px;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .contact-info {
+            font-size: 26px;
+            color: var(--accent-gold);
+            font-weight: 800;
+            margin: 20px 0;
+            letter-spacing: 0.5px;
+        }
+
+        footer p {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        /* Responsive Mobile Adjustments */
+        @media (max-width: 900px) {
+            .menu-toggle {
+                display: block;
+            }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background-color: var(--primary-blue);
+                position: absolute;
+                top: 84px;
+                left: 0;
+                padding: 25px 0;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+                border-bottom: 3px solid var(--accent-gold);
+                text-align: center;
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .nav-links a {
+                margin: 12px 0;
+                font-size: 17px;
+            }
+            .hero {
+                padding: 70px 20px 80px 20px;
+            }
+            .hero h1 { 
+                font-size: 34px; 
+            }
+            .hero p { 
+                font-size: 16px; 
+            }
+            .features-wrapper {
+                margin-top: -30px;
+            }
+            .features {
+                grid-template-columns: 1fr 1fr;
+                padding: 20px 15px;
+                gap: 12px;
+            }
+            .about-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .about-highlights {
+                grid-template-columns: 1fr;
+            }
+            .courses-section, .about-section {
+                padding: 60px 5%;
+            }
+            .courses-section h2, .about-content h2 {
+                font-size: 28px;
+            }
+            .logo-text { 
+                font-size: 18px; 
+            }
+            .logo-img { 
+                width: 38px; 
+                height: 38px; 
+            } 
+        }
+    </style>
+</head>
+<body id="home">
+
+    <!-- Navigation -->
+    <header>
+        <div class="brand-container">
+            <img src="logo.jpg" alt="Chitya Academy Logo" class="logo-img">
+            <div class="logo-text">CHITYA ACADEMY</div>
+        </div>
+        
+        <div class="menu-toggle" id="mobile-menu">☰</div>
+
+        <nav class="nav-links" id="nav-links">
+            <a href="#home">Home</a>
+            <a href="#programs">Programs</a>
+            <a href="#about">About Us</a>
+            <a href="login.html" class="login-btn">Student Login</a>
+        </nav>
+    </header>
+
+    <!-- 1. Home / Hero Section -->
+    <section class="hero" id="home">
+        <h1>IGNITING MINDS</h1>
+        <p>Structured, disciplined, and result-oriented academic coaching. Secure your child's brilliant future with expert mentorship in Alipur, Delhi.</p>
+        <div class="cta-buttons">
+            <a href="login.html" class="btn-primary">ADMISSIONS OPEN</a>
+            <a href="login.html" class="btn-secondary">Claim 7 Days FREE Demo</a>
+        </div>
+    </section>
+
+    <!-- Fixed Key Features Floating Bar -->
+    <div class="features-wrapper">
+        <section class="features">
+            <div class="feature-item"><span>✔</span> Experienced Faculty</div>
+            <div class="feature-item"><span>✔</span> Personal Attention</div>
+            <div class="feature-item"><span>✔</span> Limited Batch Size</div>
+            <div class="feature-item"><span>✔</span> Disciplined Environment</div>
+        </section>
+    </div>
+
+    <!-- 2. Programs Section (Middle) -->
+    <section class="courses-section" id="programs">
+        <div class="section-subtitle">Excellence in Education</div>
+        <h2>Our Coaching Programs</h2>
+        <div class="grid">
+            
+            <div class="card">
+                <h3>Class 1 - 8</h3>
+                <p>Comprehensive foundation building across core subjects.</p>
+                <ul>
+                    <li>Complete NCERT Coverage</li>
+                    <li>Mathematics & Science Mastery</li>
+                    <li>English & Civics Support</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Class 9 - 10</h3>
+                <p>Strict board-exam orientation and rigorous conceptual training.</p>
+                <ul>
+                    <li>Advanced Mathematics</li>
+                    <li>Core Physics & Chemistry</li>
+                    <li>Social Studies & Civics</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Class 11 - 12</h3>
+                <p>Advanced analytical training for senior secondary success.</p>
+                <ul>
+                    <li>Streamlined Physics Coaching</li>
+                    <li>In-depth Chemistry Concepts</li>
+                    <li>Regular Board Practice Sets</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Specialized Programs</h3>
+                <p>Targeted skill enhancement batches for fast improvement.</p>
+                <ul>
+                    <li>Spoken English Development</li>
+                    <li>Intensive Board Exam Boosters</li>
+                    <li>Weekly Performance Tests</li>
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 3. About Us Section (Bottom) -->
+    <section class="about-section" id="about">
+        <div class="about-container">
+            <div class="about-content">
+                <div class="section-subtitle">Established Academic Excellence</div>
+                <h2>Welcome to Chitya Academy</h2>
+                <p>Located in Alipur, Delhi, Chitya Academy is built on the core belief that every student possesses unique potential that flourishes under disciplined mentoring and individualized focus. We move away from overcrowded classrooms to give young minds the rigorous conceptual grounding they need.</p>
+                <p>Whether building foundational clarity from Class 1 or preparing for high-stakes board examinations in Class 10 and 12, our result-oriented framework combines regular testing, structured notes, and complete NCERT syllabus mastery.</p>
+                
+                <div class="about-highlights">
+                    <div class="highlight-box">
+                        <h4>NCERT Mastery</h4>
+                        <p>Complete focus on core textbooks and board guidelines.</p>
+                    </div>
+                    <div class="highlight-box">
+                        <h4>Doubt Resolution</h4>
+                        <p>One-on-one attention ensuring zero academic gaps.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="about-card-visual">
+                <h3>Building Future Achievers</h3>
+                <p>Our commitment is centered around consistency, conceptual strength, and complete accountability for student progress.</p>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <h2>Class 1-12</h2>
+                        <p>Comprehensive Batches</p>
+                    </div>
+                    <div class="stat-item">
+                        <h2>100%</h2>
+                        <p>Result Oriented</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <h2>Seats are limited. Early enrollment is recommended.</h2>
+        <div class="contact-info">
+            📞 7011002695 | 7011522771
+        </div>
+        <p>Alipur, Delhi • Chitya Academy Management Hub</p>
+    </footer>
+
+    <!-- JavaScript for Mobile Menu & Auto-Reset -->
+    <script>
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = document.getElementById('nav-links');
+
+        mobileMenu.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 900) {
+                navLinks.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

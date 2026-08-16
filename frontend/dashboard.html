@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal | Chitya Academy</title>
+    <!-- html2pdf.js for Client-Side PDF Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --primary-blue: #0b1c3c;
+            --accent-gold: #fdd017;
+            --alert-red: #d92027;
+            --success-green: #28a745;
+            --text-dark: #333333;
+            --text-light: #ffffff;
+            --bg-light: #f4f6f9;
+            --sidebar-width: 260px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-light); display: flex; min-height: 100vh; overflow-x: hidden; }
+
+        /* Sidebar Styling */
+        .sidebar { width: var(--sidebar-width); background-color: #061124; color: var(--text-light); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; z-index: 1000; transform: translateX(0); transition: transform 0.3s ease; }
+        .sidebar-header { padding: 25px 20px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .sidebar-header h2 { color: var(--accent-gold); font-size: 20px; margin-bottom: 5px; }
+        .sidebar-header span { font-size: 11px; background: var(--accent-gold); color: var(--primary-blue); padding: 2px 8px; border-radius: 12px; font-weight: bold; }
+        .sidebar-menu { list-style: none; padding: 20px 0; flex-grow: 1; overflow-y: auto; }
+        .sidebar-menu li a { display: block; padding: 15px 25px; color: #b0c4de; text-decoration: none; font-weight: 500; transition: all 0.2s ease; border-left: 4px solid transparent; cursor: pointer; font-size: 15px; }
+        .sidebar-menu li a:hover, .sidebar-menu li a.active { background-color: rgba(255,255,255,0.06); border-left-color: var(--accent-gold); color: var(--text-light); }
+
+        /* Main Content */
+        .main-content { margin-left: var(--sidebar-width); padding: 30px; width: calc(100% - var(--sidebar-width)); min-height: 100vh; transition: margin-left 0.3s ease, width 0.3s ease; }
+        .header-bar { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); margin-bottom: 25px; gap: 15px; flex-wrap: wrap; }
+        .header-bar h1 { font-size: 20px; color: var(--primary-blue); }
+        .user-badge { background: #edf2f7; color: #4a5568; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 13px; }
+        .user-badge.premium { background: rgba(40, 167, 69, 0.12); color: var(--success-green); }
+        .menu-toggle { display: none; align-items: center; gap: 8px; background: var(--primary-blue); color: var(--accent-gold); border: none; padding: 10px 16px; font-size: 15px; font-weight: bold; border-radius: 6px; cursor: pointer; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+        .dashboard-section { display: none; }
+        .dashboard-section.active { display: block; }
+
+        /* Grids & Cards */
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .card-box { background: #fff; border-radius: 8px; padding: 22px; box-shadow: 0 4px 6px rgba(0,0,0,0.04); position: relative; border-top: 4px solid var(--primary-blue); display: flex; flex-direction: column; justify-content: space-between; }
+        .card-box.locked { border-top-color: var(--alert-red); }
+        .card-box.test-card { border-top-color: var(--accent-gold); }
+        .card-box h3 { font-size: 17px; color: var(--primary-blue); margin-bottom: 8px; }
+        .card-box p { font-size: 14px; color: #666; margin-bottom: 20px; line-height: 1.4; }
+        
+        .btn-action { display: block; text-align: center; padding: 10px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 14px; cursor: pointer; border: none; transition: background 0.2s; width: 100%; }
+        .btn-primary { background-color: var(--primary-blue); color: var(--accent-gold); }
+        .btn-primary:hover { background-color: #08152d; }
+        .btn-unlock { background-color: var(--alert-red); color: #fff; }
+        .btn-unlock:hover { background-color: #b5191f; }
+        .btn-secondary { background-color: #edf2f7; color: #4a5568; }
+        .no-data { grid-column: 1 / -1; text-align: center; padding: 40px; background: #fff; border-radius: 8px; color: #666; box-shadow: 0 4px 6px rgba(0,0,0,0.04); }
+
+        /* Subject Filter Tabs */
+        .subject-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .tab-btn { background: #fff; border: 1px solid #cbd5e0; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; color: var(--primary-blue); cursor: pointer; transition: all 0.2s; }
+        .tab-btn:hover, .tab-btn.active { background: var(--primary-blue); color: var(--accent-gold); border-color: var(--primary-blue); }
+
+        /* EXAM MODE */
+        #active-test-view { display: none; background: #fff; border-radius: 10px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .exam-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #edf2f7; padding-bottom: 15px; margin-bottom: 25px; }
+        .exam-title { color: var(--primary-blue); font-size: 22px; }
+        .question-block { margin-bottom: 25px; padding: 20px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid var(--primary-blue); }
+        .question-text { font-weight: 600; color: var(--primary-blue); margin-bottom: 15px; font-size: 16px; }
+        .option-label { display: block; padding: 10px 15px; margin-bottom: 8px; background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+        .option-label:hover { border-color: var(--primary-blue); }
+
+        /* Table Styling for Profile/Progress */
+        .progress-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .progress-table th { padding: 12px 15px; text-align: left; background: #f8f9fa; color: var(--primary-blue); font-size: 13px; text-transform: uppercase; border-bottom: 2px solid #edf2f7; }
+        .progress-table td { padding: 15px; border-bottom: 1px solid #edf2f7; color: #444; font-size: 14px; }
+        
+        /* Logout Modal */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 28, 60, 0.6); backdrop-filter: blur(3px); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
+        .modal-card { background: #fff; padding: 30px; border-radius: 10px; width: 100%; max-width: 400px; text-align: center; border-top: 5px solid var(--alert-red); }
+        .modal-actions { display: flex; gap: 12px; margin-top: 20px; }
+
+        @media (max-width: 1024px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.mobile-open { transform: translateX(0); }
+            .main-content { margin-left: 0; width: 100%; padding: 15px; }
+            .menu-toggle { display: inline-flex; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>Chitya Academy</h2>
+            <span>STUDENT PORTAL</span>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a onclick="switchStudentSection('overview')" id="menu-overview" class="active">Dashboard Overview</a></li>
+            <li><a onclick="switchStudentSection('materials')" id="menu-materials">Study Materials</a></li>
+            <li><a onclick="switchStudentSection('notice')" id="menu-notice">Notice Board</a></li>
+            <li><a onclick="switchStudentSection('tests')" id="menu-tests">Online Test Series</a></li>
+            <li><a onclick="switchStudentSection('profile')" id="menu-profile">My Profile</a></li>
+            <li><a href="#" onclick="openLogoutModal()">Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <button class="menu-toggle" onclick="toggleSidebar()">☰ Menu Panel</button>
+
+        <div class="header-bar">
+            <h1 id="welcome-msg">Welcome, Student!</h1>
+            <div id="status-container">
+                <span class="user-badge" id="account-status">Free Account</span>
+            </div>
+        </div>
+
+        <!-- SECTION 1: Overview -->
+        <div id="section-overview" class="dashboard-section active">
+            <div class="card-box">
+                <h2 style="color: var(--primary-blue); margin-bottom: 10px;">Welcome to Chitya Academy Learning Hub</h2>
+                <p style="color: #555; line-height: 1.6;">You have full access to your registered class curriculum, test series updates, and exclusive tutor announcements. Use the sidebar to explore your study materials or check recent notices.</p>
+            </div>
+        </div>
+
+        <!-- SECTION 2: Study Materials -->
+        <div id="section-materials" class="dashboard-section">
+            <h2 style="color: var(--primary-blue); margin-bottom: 20px; font-size: 20px;">Study Materials</h2>
+            <div class="grid-container" id="materials-container">
+                <p class="no-data">Loading your study portal...</p>
+            </div>
+        </div>
+
+        <!-- SECTION 3: Notice Board -->
+        <div id="section-notice" class="dashboard-section">
+            <h2 style="color: var(--primary-blue); margin-bottom: 20px;">Director's Notice Board</h2>
+            <div id="notice-container">
+                <p class="no-data">Loading notices...</p>
+            </div>
+        </div>
+
+        <!-- SECTION 4: Online Test Series -->
+        <div id="section-tests" class="dashboard-section">
+            <div id="test-list-view">
+                <h2 style="color: var(--primary-blue); margin-bottom: 15px;">Available Test Series</h2>
+                <div class="subject-tabs" id="subject-filter-tabs">
+                    <button class="tab-btn active" onclick="filterTestsBySubject('All', this)">All Subjects</button>
+                    <button class="tab-btn" onclick="filterTestsBySubject('Mathematics', this)">Mathematics</button>
+                    <button class="tab-btn" onclick="filterTestsBySubject('Science', this)">Science</button>
+                    <button class="tab-btn" onclick="filterTestsBySubject('Civics', this)">Civics / SST</button>
+                    <button class="tab-btn" onclick="filterTestsBySubject('English', this)">English</button>
+                </div>
+                <div class="grid-container" id="test-cards-container">
+                    <p class="no-data">Loading tests...</p>
+                </div>
+            </div>
+
+            <div id="active-test-view">
+                <div class="exam-header">
+                    <div>
+                        <span id="active-test-subject" style="font-size: 11px; font-weight: bold; color: #888; text-transform: uppercase;">SUBJECT</span>
+                        <h2 class="exam-title" id="active-test-title">Test Title</h2>
+                    </div>
+                    <button class="btn-action btn-secondary" style="width: auto;" onclick="closeExamMode()">Quit Test</button>
+                </div>
+                <form id="exam-form" onsubmit="submitExam(event)">
+                    <div id="exam-questions-container"></div>
+                    <div style="margin-top: 30px; text-align: right;">
+                        <button type="submit" class="btn-action btn-primary" style="width: 250px; display: inline-block;">Submit Test & View Score</button>
+                    </div>
+                </form>
+                <div id="exam-result-box" style="display: none; margin-top: 20px; padding: 20px; text-align: center; border-radius: 8px; font-size: 18px; font-weight: bold;"></div>
+            </div>
+        </div>
+
+        <!-- SECTION 5: My Profile & Progress Tracking -->
+        <div id="section-profile" class="dashboard-section">
+            <div class="card-box" style="margin-bottom: 25px;">
+                <h2 style="color: var(--primary-blue); margin-bottom: 20px;">Account Details</h2>
+                <div style="display: flex; flex-direction: column; gap: 12px; font-size: 15px; color: #333;">
+                    <p><strong>Full Name:</strong> <span id="profile-name">--</span></p>
+                    <p><strong>Email Address:</strong> <span id="profile-email">--</span></p>
+                    <p><strong>Target Class:</strong> <span id="profile-class">--</span></p>
+                    <p><strong>Account Tier:</strong> <span id="profile-tier">--</span></p>
+                </div>
+            </div>
+
+            <div class="card-box" style="padding: 0; overflow: hidden;">
+                <div style="padding: 20px 25px; background: var(--primary-blue); color: var(--accent-gold);">
+                    <h2 style="font-size: 18px; margin: 0;">My Performance Analytics</h2>
+                </div>
+                <div id="progress-container" style="overflow-x: auto;">
+                    <p class="no-data">Loading your performance data...</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Logout Modal -->
+    <div class="modal-overlay" id="logoutModal">
+        <div class="modal-card">
+            <h3 style="color: var(--primary-blue); font-size: 20px; margin-bottom: 10px;">Confirm Logout</h3>
+            <p style="color: #666; font-size: 14px; margin-bottom: 25px;">Are you sure you want to log out?</p>
+            <div class="modal-actions">
+                <button class="btn-action btn-secondary" onclick="closeLogoutModal()">Cancel</button>
+                <button class="btn-action btn-unlock" onclick="confirmLogout()">Yes, Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('mobile-open'); }
+
+        function switchStudentSection(sectionId) {
+            const sections = ['overview', 'materials', 'notice', 'tests', 'profile'];
+            sections.forEach(sec => {
+                document.getElementById('section-' + sec).classList.remove('active');
+                document.getElementById('menu-' + sec).classList.remove('active');
+            });
+            document.getElementById('section-' + sectionId).classList.add('active');
+            document.getElementById('menu-' + sectionId).classList.add('active');
+            
+            if (window.innerWidth <= 1024) { document.getElementById('sidebar').classList.remove('mobile-open'); }
+
+            if (sectionId === 'notice') fetchNotices();
+            if (sectionId === 'tests') {
+                closeExamMode(); 
+                if (studentData) fetchStudentTests(studentData.target_class);
+            }
+            if (sectionId === 'profile') {
+                if (studentData) fetchStudentProgress();
+            }
+        }
+
+        const studentData = JSON.parse(localStorage.getItem('student'));
+
+        if (!studentData) {
+            window.location.href = 'login.html'; 
+        } else {
+            document.getElementById('welcome-msg').innerText = `Welcome, ${studentData.full_name} (${studentData.target_class})`;
+            document.getElementById('profile-name').innerText = studentData.full_name;
+            document.getElementById('profile-email').innerText = studentData.email || 'Registered User';
+            document.getElementById('profile-class').innerText = studentData.target_class;
+            
+            const badge = document.getElementById('account-status');
+            if (studentData.is_premium) {
+                badge.className = 'user-badge premium';
+                badge.innerText = 'Premium Member - Full Access';
+                document.getElementById('profile-tier').innerHTML = '<span style="color: var(--success-green); font-weight: bold;">Premium Member</span>';
+            } else {
+                badge.className = 'user-badge';
+                badge.innerText = 'Free Account (Upgrade Available)';
+                document.getElementById('profile-tier').innerHTML = '<span style="color: #666; font-weight: bold;">Free Lead</span>';
+            }
+
+            fetchMaterials(studentData.target_class, studentData.is_premium);
+            fetchNotices();
+            fetchStudentTests(studentData.target_class);
+        }
+
+        async function fetchMaterials(targetClass, isPremium) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/materials/${encodeURIComponent(targetClass)}`);
+                const data = await response.json();
+                const container = document.getElementById('materials-container');
+
+                if (response.ok && data.materials.length > 0) {
+                    container.innerHTML = '';
+                    data.materials.forEach(mat => {
+                        const isLocked = mat.is_premium && !isPremium;
+                        container.innerHTML += `
+                            <div class="card-box ${isLocked ? 'locked' : ''}">
+                                <div>
+                                    <span style="font-size: 11px; font-weight: bold; color: #888; text-transform: uppercase;">${mat.subject}</span>
+                                    <h3>${mat.title}</h3>
+                                    <p>${isLocked ? '🔒 Premium resource. Upgrade to unlock.' : '📖 Free resource.'}</p>
+                                </div>
+                                ${isLocked 
+                                    ? `<button onclick="triggerUpgradePrompt()" class="btn-action btn-unlock">Unlock Premium</button>`
+                                    : `<a href="${mat.file_path}" target="_blank" class="btn-action btn-primary">Download PDF</a>`
+                                }
+                            </div>
+                        `;
+                    });
+                } else {
+                    container.innerHTML = `<div class="no-data">No materials uploaded yet.</div>`;
+                }
+            } catch (err) {
+                document.getElementById('materials-container').innerHTML = `<div class="no-data" style="color: red;">Server connection error.</div>`;
+            }
+        }
+
+        async function fetchNotices() {
+            try {
+                const response = await fetch('http://localhost:3000/api/notices');
+                const data = await response.json();
+                const container = document.getElementById('notice-container');
+
+                if (response.ok && data.notices.length > 0) {
+                    container.innerHTML = '';
+                    data.notices.forEach(n => {
+                        container.innerHTML += `
+                            <div class="card-box" style="margin-bottom: 15px; border-left: 4px solid var(--accent-gold); border-top: none;">
+                                <h3 style="color: var(--primary-blue); margin-bottom: 8px;">${n.title}</h3>
+                                <p style="color: #445; white-space: pre-wrap;">${n.content}</p>
+                                <small style="color: #888; display: block; margin-top: 10px;">Posted: ${new Date(n.created_at).toLocaleDateString()}</small>
+                            </div>
+                        `;
+                    });
+                } else {
+                    container.innerHTML = `<div class="no-data">No announcements right now.</div>`;
+                }
+            } catch (err) {
+                document.getElementById('notice-container').innerHTML = `<p style="color: red; text-align: center;">Server error.</p>`;
+            }
+        }
+
+        // --- EXAM SYSTEM LOGIC ---
+        let allGlobalTests = [];
+        let currentActiveTest = null;
+
+        async function fetchStudentTests(targetClass) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/tests/${encodeURIComponent(targetClass)}`);
+                const data = await response.json();
+                
+                if (response.ok && data.tests.length > 0) {
+                    allGlobalTests = data.tests;
+                    renderTestCards(allGlobalTests);
+                } else {
+                    document.getElementById('test-cards-container').innerHTML = `<div class="no-data">No active tests available for your class.</div>`;
+                }
+            } catch (err) {
+                document.getElementById('test-cards-container').innerHTML = `<div class="no-data" style="color: red;">Server connection error.</div>`;
+            }
+        }
+
+        function filterTestsBySubject(subjectName, btnElement) {
+            const buttons = document.querySelectorAll('#subject-filter-tabs .tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            if (subjectName === 'All') {
+                renderTestCards(allGlobalTests);
+            } else {
+                const filtered = allGlobalTests.filter(t => t.subject.toLowerCase() === subjectName.toLowerCase());
+                renderTestCards(filtered);
+            }
+        }
+
+        function renderTestCards(testsArray) {
+            const container = document.getElementById('test-cards-container');
+            if (testsArray.length === 0) {
+                container.innerHTML = `<div class="no-data">No tests found for this subject.</div>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            testsArray.forEach(test => {
+                const questionsArray = typeof test.questions === 'string' ? JSON.parse(test.questions) : test.questions;
+                container.innerHTML += `
+                    <div class="card-box test-card">
+                        <div>
+                            <span style="font-size: 11px; font-weight: bold; color: #888; text-transform: uppercase;">${test.subject}</span>
+                            <h3>${test.title}</h3>
+                            <p>Total Questions: <strong>${questionsArray.length}</strong></p>
+                        </div>
+                        <div>
+                            <button onclick="openExamMode(${test.id})" class="btn-action btn-primary" style="margin-bottom: 10px;">Start Test</button>
+                            <button onclick="exportTestPDF(${test.id})" class="btn-action btn-secondary" style="font-size: 13px;">⬇ Export to PDF</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // --- PDF EXPORT LOGIC WITH ROBUST LOGO.JPG WATERMARK ---
+        function exportTestPDF(testId) {
+            const test = allGlobalTests.find(t => t.id === testId);
+            if (!test) return;
+
+            const questionsArray = typeof test.questions === 'string' ? JSON.parse(test.questions) : test.questions;
+            
+            const element = document.createElement('div');
+            element.style.padding = '20px';
+            element.style.fontFamily = 'Helvetica, sans-serif';
+            element.style.color = '#333';
+
+            // 1. Chitya Academy Header
+            let html = `
+                <div style="text-align: center; border-bottom: 3px solid #0b1c3c; padding-bottom: 15px; margin-bottom: 30px;">
+                    <h1 style="color: #0b1c3c; margin: 0; font-size: 28px; text-transform: uppercase; font-weight: bold;">Chitya Academy</h1>
+                    <p style="margin: 5px 0 0 0; font-size: 14px; color: #666; font-weight: bold;">Official Test Series Document</p>
+                </div>
+                <h2 style="color: #0b1c3c; margin-bottom: 5px;">${test.title}</h2>
+                <p style="color: #666; margin-bottom: 30px; font-weight: bold;">Subject: ${test.subject} | Target: ${studentData.target_class}</p>
+            `;
+
+            // 2. Questions Format
+            questionsArray.forEach((q, qIndex) => {
+                html += `
+                    <div style="margin-bottom: 25px; page-break-inside: avoid;">
+                        <p style="font-weight: bold; font-size: 16px; margin-bottom: 10px; color: #0b1c3c;">Q${qIndex + 1}. ${q.question}</p>
+                        <div style="padding-left: 15px;">
+                `;
+                q.options.forEach(opt => {
+                    html += `<div style="margin-bottom: 8px; font-size: 15px;">&#9711; ${opt}</div>`;
+                });
+                html += `</div></div>`;
+            });
+
+            // 3. Footer Branding
+            html += `
+                <div style="margin-top: 50px; text-align: center; border-top: 2px solid #edf2f7; padding-top: 20px; font-size: 12px; color: #888; page-break-inside: avoid;">
+                    <p style="margin: 0; font-weight: bold;">Chitya Academy &copy; ${new Date().getFullYear()}</p>
+                    <p style="margin: 5px 0 0 0;">Generated for ${studentData.full_name}</p>
+                </div>
+            `;
+
+            element.innerHTML = html;
+
+            const opt = {
+                margin:       [15, 15, 15, 15], 
+                filename:     `${test.title.replace(/\s+/g, '_')}_ChityaAcademy.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            // 4. Load the Logo securely using a Canvas before passing to jsPDF
+            const img = new Image();
+            img.crossOrigin = "Anonymous"; // Prevent CORS blocking
+            img.src = 'logo.jpg'; 
+            
+            img.onload = function() {
+                // Convert to base64 Data URL to guarantee it renders in the PDF
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+                const dataURL = canvas.toDataURL('image/jpeg');
+
+                html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
+                    const totalPages = pdf.internal.getNumberOfPages();
+                    const pageWidth = pdf.internal.pageSize.getWidth();
+                    const pageHeight = pdf.internal.pageSize.getHeight();
+                    
+                    const imgSize = 100; 
+                    const x = (pageWidth - imgSize) / 2;
+                    const y = (pageHeight - imgSize) / 2;
+
+                    for (let i = 1; i <= totalPages; i++) {
+                        pdf.setPage(i);
+                        if (pdf.GState) { pdf.setGState(new pdf.GState({opacity: 0.15})); }
+                        pdf.addImage(dataURL, 'JPEG', x, y, imgSize, imgSize);
+                        if (pdf.GState) { pdf.setGState(new pdf.GState({opacity: 1.0})); }
+                    }
+                }).save();
+            };
+
+            img.onerror = function() {
+                console.warn("logo.jpg not found. Downloading without watermark.");
+                html2pdf().set(opt).from(element).save();
+            };
+        }
+
+        // --- EXAM TAKING LOGIC ---
+        function openExamMode(testId) {
+            currentActiveTest = allGlobalTests.find(t => t.id === testId);
+            if (!currentActiveTest) return;
+
+            document.getElementById('test-list-view').style.display = 'none';
+            document.getElementById('active-test-view').style.display = 'block';
+            document.getElementById('exam-result-box').style.display = 'none';
+            document.getElementById('exam-form').style.display = 'block';
+            
+            document.getElementById('active-test-title').innerText = currentActiveTest.title;
+            document.getElementById('active-test-subject').innerText = currentActiveTest.subject;
+
+            const questionsArray = typeof currentActiveTest.questions === 'string' ? JSON.parse(currentActiveTest.questions) : currentActiveTest.questions;
+            const qContainer = document.getElementById('exam-questions-container');
+            qContainer.innerHTML = '';
+
+            questionsArray.forEach((q, qIndex) => {
+                let optionsHtml = '';
+                q.options.forEach(opt => {
+                    optionsHtml += `
+                        <label class="option-label">
+                            <input type="radio" name="q_${qIndex}" value="${opt}" required style="margin-right: 10px;"> ${opt}
+                        </label>
+                    `;
+                });
+
+                qContainer.innerHTML += `
+                    <div class="question-block">
+                        <p class="question-text">Q${qIndex + 1}. ${q.question}</p>
+                        ${optionsHtml}
+                    </div>
+                `;
+            });
+        }
+
+        function closeExamMode() {
+            document.getElementById('active-test-view').style.display = 'none';
+            document.getElementById('test-list-view').style.display = 'block';
+            currentActiveTest = null;
+        }
+
+        async function submitExam(e) {
+            e.preventDefault();
+            if (!currentActiveTest) return;
+
+            const questionsArray = typeof currentActiveTest.questions === 'string' ? JSON.parse(currentActiveTest.questions) : currentActiveTest.questions;
+            let score = 0;
+            const total = questionsArray.length;
+
+            questionsArray.forEach((q, qIndex) => {
+                const selectedOption = document.querySelector(`input[name="q_${qIndex}"]:checked`);
+                if (selectedOption && selectedOption.value === q.answer) {
+                    score++;
+                }
+            });
+
+            document.getElementById('exam-form').style.display = 'none';
+            const resultBox = document.getElementById('exam-result-box');
+            resultBox.style.display = 'block';
+            
+            const percent = Math.round((score/total)*100);
+            resultBox.style.background = percent >= 50 ? 'rgba(40, 167, 69, 0.1)' : 'rgba(217, 32, 39, 0.1)';
+            resultBox.style.color = percent >= 50 ? 'var(--success-green)' : 'var(--alert-red)';
+            resultBox.innerHTML = `You Scored: ${score} out of ${total} (${percent}%)<br><button onclick="closeExamMode()" class="btn-action btn-secondary" style="margin-top: 15px; width: 200px; display: inline-block;">Back to Tests</button>`;
+
+            if (studentData) {
+                try {
+                    await fetch('http://localhost:3000/api/tests/submit', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            student_id: studentData.id,
+                            test_id: currentActiveTest.id,
+                            score: score,
+                            total_marks: total
+                        })
+                    });
+                } catch (err) {
+                    console.error("Failed to save score on server");
+                }
+            }
+        }
+
+        // --- PROGRESS / PERFORMANCE LOGIC ---
+        async function fetchStudentProgress() {
+            if (!studentData) return;
+            try {
+                const response = await fetch(`http://localhost:3000/api/progress/${studentData.id}`);
+                const data = await response.json();
+                const container = document.getElementById('progress-container');
+
+                if (response.ok && data.history.length > 0) {
+                    let html = `
+                        <table class="progress-table">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Test Details</th>
+                                    <th style="text-align: center;">Score</th>
+                                    <th>Accuracy</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+                    
+                    data.history.forEach(record => {
+                        const percent = Math.round((record.score / record.total_marks) * 100);
+                        let barColor = 'var(--success-green)'; 
+                        if (percent < 75) barColor = '#f59e0b'; 
+                        if (percent < 50) barColor = 'var(--alert-red)'; 
+
+                        const date = new Date(record.submitted_at).toLocaleDateString();
+
+                        html += `
+                            <tr>
+                                <td style="font-weight: bold;">${record.subject}</td>
+                                <td style="color: var(--primary-blue); font-weight: 500;">
+                                    ${record.title}<br>
+                                    <span style="font-size: 12px; color: #888; font-weight: normal;">Attempted: ${date}</span>
+                                </td>
+                                <td style="text-align: center; font-weight: bold; font-size: 16px; color: var(--primary-blue);">
+                                    ${record.score} / ${record.total_marks}
+                                </td>
+                                <td style="min-width: 150px;">
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <div style="flex-grow: 1; background: #edf2f7; height: 8px; border-radius: 4px; overflow: hidden;">
+                                            <div style="width: ${percent}%; height: 100%; background: ${barColor}; border-radius: 4px;"></div>
+                                        </div>
+                                        <span style="font-size: 13px; font-weight: bold; width: 35px; color: ${barColor};">${percent}%</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                    });
+
+                    html += `</tbody></table>`;
+                    container.innerHTML = html;
+                } else {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: 40px 20px;">
+                            <h3 style="color: var(--primary-blue); margin-bottom: 10px;">No Tests Attempted Yet</h3>
+                            <p style="color: #666;">Head over to the Online Test Series tab to take your first test and track your progress!</p>
+                        </div>
+                    `;
+                }
+            } catch (err) {
+                document.getElementById('progress-container').innerHTML = `<p style="color: red; text-align: center; padding: 20px;">Failed to load analytics.</p>`;
+            }
+        }
+
+        function triggerUpgradePrompt() { alert("Marketing Upgrade Trigger:\n\nContact admin to unlock premium materials."); }
+        function openLogoutModal() { document.getElementById('logoutModal').style.display = 'flex'; }
+        function closeLogoutModal() { document.getElementById('logoutModal').style.display = 'none'; }
+        function confirmLogout() { localStorage.removeItem('student'); window.location.href = 'login.html'; }
+    </script>
+</body>
+</html>
