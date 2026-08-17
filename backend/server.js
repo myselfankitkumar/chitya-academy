@@ -30,13 +30,18 @@ pool.connect((err, client, release) => {
 });
 
 // ==========================================
-// EMAIL TRANSPORTER CONFIGURATION
+// EMAIL TRANSPORTER CONFIGURATION (UPDATED FOR RENDER IPv4)
 // ==========================================
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, 
     auth: {
         user: 'chityaacademy@gmail.com', 
         pass: 'cvfqnjpsaplcltbw' 
+    },
+    tls: {
+        rejectUnauthorized: false
     }
 });
 
